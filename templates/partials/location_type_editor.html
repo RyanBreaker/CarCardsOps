@@ -1,0 +1,9 @@
+<form class="box" hx-swap="outerHTML" hx-target="this">
+    <label>Name: <input name="name" value="{{location_type.name}}"></label>
+    <br />
+    <label>Description: <input name="description" value="{{location_type.description}}"></label>
+    <br />
+    <input type="hidden" name="id" value="{{location_type.id}}">
+    <button type="submit" hx-put="/location_types/{{location_type.id}}">Save</button>
+    <button hx-get="/location_types/{{location_type.id}}">Cancel</button>
+</form>

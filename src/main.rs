@@ -3,12 +3,12 @@ mod handlers;
 mod models;
 mod templates;
 
-use crate::api::api;
-use crate::handlers::locations;
+use crate::handlers::{location_types, locations};
 use crate::models::{Location, LocationType};
 use crate::templates::IndexTemplate;
 use askama::Template;
 use poem::listener::TcpListener;
+use poem::middleware::Tracing;
 use poem::web::{Data, Html};
 use poem::{get, handler, EndpointExt, Route, Server};
 use sqlx::PgPool;
@@ -38,11 +38,14 @@ async fn main() -> Result<(), std::io::Error> {
     info!("Creating db pools...");
     let pool = db_init().await;
 
+    info!("Initializing app...");
     let app = Route::new()
         .at("/", get(index))
         .nest("/locations", locations())
-        .nest("/api", api())
-        .data(pool);
+        .nest("/location_types", location_types())
+        // .nest("/api", api()) // TODO: Will this be used?
+        .data(pool)
+        .with(Tracing);
 
     Server::new(TcpListener::bind("localhost:3000"))
         .run(app)

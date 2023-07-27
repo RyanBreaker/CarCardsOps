@@ -4,6 +4,7 @@ use poem::web::{Data, Form, Path};
 use poem::{handler, post, put, Route};
 use sqlx::PgPool;
 
+#[allow(unused)]
 pub fn api() -> Route {
     Route::new()
         .at("/locations", post(create_location))

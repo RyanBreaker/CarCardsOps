@@ -1,7 +1,6 @@
 use serde::Deserialize;
 use crate::models::Id;
-use sqlx::postgres::PgQueryResult;
-use sqlx::{query, query_as, Error, FromRow, PgPool};
+use sqlx::{query_as, Error, FromRow, PgPool};
 
 #[derive(FromRow, Debug, Clone, Deserialize)]
 pub struct Location {
@@ -43,14 +42,15 @@ impl Location {
             .await
     }
 
-    pub async fn update(&self, pool: &PgPool) -> Result<PgQueryResult, Error> {
-        query!(
-            "UPDATE locations SET name = $1, description = $2 WHERE id = $3",
+    pub async fn update(&self, pool: &PgPool) -> Result<Location, Error> {
+        query_as!(
+            Location,
+            "UPDATE locations SET name = $1, description = $2 WHERE id = $3 RETURNING *",
             self.name,
             self.description,
             self.id
         )
-            .execute(pool)
+            .fetch_one(pool)
             .await
     }
 

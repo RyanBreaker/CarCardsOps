@@ -1,3 +1,4 @@
+pub mod location_types;
 pub mod locations;
 
 use crate::models::{Location, LocationType};
