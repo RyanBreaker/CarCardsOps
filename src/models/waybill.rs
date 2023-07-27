@@ -28,7 +28,7 @@ impl Waybill {
         }
     }
 
-    pub async fn insert(&self, pool: &PgPool) -> Result<Waybill, Error> {
+    pub async fn insert(&self, pool: &PgPool) -> Result<Self, Error> {
         query_as!(
             Waybill,
             "INSERT INTO waybills (description, routing, from_location_id, to_location_id) VALUES ($1, $2, $3, $4) RETURNING *",
@@ -41,20 +41,20 @@ impl Waybill {
             .await
     }
 
-    pub async fn update(&self, pool: &PgPool) -> Result<PgQueryResult, Error> {
-        query!(
-            "UPDATE waybills SET description = $1, routing = $2, from_location_id = $3, to_location_id = $4 WHERE id = $5",
+    pub async fn update(&self, pool: &PgPool) -> Result<Self, Error> {
+        query_as!(
+            "UPDATE waybills SET description = $1, routing = $2, from_location_id = $3, to_location_id = $4 WHERE id = $5 RETURNING *",
             self.description,
             self.routing,
             self.from_location_id,
             self.to_location_id,
             self.id
         )
-            .execute(pool)
+            .fetch_one(pool)
             .await
     }
 
-    pub async fn select(id: Id, pool: &PgPool) -> Result<Waybill, Error> {
+    pub async fn select(id: Id, pool: &PgPool) -> Result<Self, Error> {
         query_as!(
             Waybill,
             "SELECT * FROM waybills WHERE id = $1",
@@ -64,7 +64,7 @@ impl Waybill {
             .await
     }
 
-    pub async fn all(pool: &PgPool) -> Result<Vec<Waybill>, Error> {
+    pub async fn all(pool: &PgPool) -> Result<Vec<Self>, Error> {
         query_as!(
             Waybill,
             "SELECT * FROM waybills"
