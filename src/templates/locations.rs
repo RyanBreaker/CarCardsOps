@@ -7,13 +7,13 @@ pub struct LocationsTemplate {
 }
 
 #[derive(askama::Template)]
-#[template(path = "partials/location.html")]
+#[template(path = "partials/location/location.html")]
 pub struct LocationTemplate {
     pub location: Location,
 }
 
 #[derive(askama::Template)]
-#[template(path = "partials/location_editor.html")]
+#[template(path = "partials/location/location_editor.html")]
 pub struct LocationEditorTemplate {
     pub location: Location,
     pub location_types: Vec<LocationType>,
