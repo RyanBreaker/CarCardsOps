@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE waybills SET description = $1, routing = $2, from_location_id = $3, to_location_id = $4 WHERE id = $5",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Int4",
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "4c11fb69be3de9e8de81c919af84b8c15bf6766c4f51f68268d6f3b70f506b88"
+}

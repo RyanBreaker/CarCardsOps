@@ -16,8 +16,11 @@ use tracing::info;
 
 #[handler]
 async fn index(Data(pool): Data<&PgPool>) -> Html<String> {
-    let location_types = LocationType::all(pool).await.unwrap();
-    let locations = Location::all(pool).await.unwrap();
+    let (locations, location_types) =
+        match tokio::try_join!(Location::all(pool), LocationType::all(pool)) {
+            Ok(a) => a,
+            Err(e) => panic!("{e}"),
+        };
     let template = IndexTemplate {
         locations,
         location_types,
