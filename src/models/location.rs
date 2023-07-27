@@ -1,8 +1,9 @@
+use serde::Deserialize;
 use crate::models::Id;
 use sqlx::postgres::PgQueryResult;
 use sqlx::{query, query_as, Error, FromRow, PgPool};
 
-#[derive(FromRow, Debug)]
+#[derive(FromRow, Debug, Clone, Deserialize)]
 pub struct Location {
     pub id: Id,
     pub name: String,
@@ -21,6 +22,15 @@ impl Location {
         }
     }
 
+    pub fn new_with_id(id: Id, name: String, description: String, location_type_id: Id) -> Self {
+        Self {
+            id,
+            name,
+            description,
+            location_type_id,
+        }
+    }
+    
     pub async fn insert(&self, pool: &PgPool) -> Result<Location, Error> {
         query_as!(
             Location,
@@ -51,7 +61,7 @@ impl Location {
     }
 
     pub async fn all(pool: &PgPool) -> Result<Vec<Location>, Error> {
-        query_as!(Location, "SELECT * FROM locations")
+        query_as!(Location, "SELECT * FROM locations ORDER BY name")
             .fetch_all(pool)
             .await
     }

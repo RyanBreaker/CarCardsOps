@@ -1,14 +1,16 @@
+mod api;
+mod handlers;
 mod models;
 mod templates;
 
+use crate::api::api;
+use crate::handlers::locations;
 use crate::models::{Location, LocationType};
-use crate::templates::HomeTemplate;
+use crate::templates::IndexTemplate;
 use askama::Template;
-use poem::http::StatusCode;
 use poem::listener::TcpListener;
-use poem::web::{Data, Form, Html};
-use poem::{get, handler, post, EndpointExt, Route, Server};
-use serde::Deserialize;
+use poem::web::{Data, Html};
+use poem::{get, handler, EndpointExt, Route, Server};
 use sqlx::PgPool;
 use tracing::info;
 
@@ -16,35 +18,12 @@ use tracing::info;
 async fn index(Data(pool): Data<&PgPool>) -> Html<String> {
     let location_types = LocationType::all(pool).await.unwrap();
     let locations = Location::all(pool).await.unwrap();
-    let template = HomeTemplate {
+    let template = IndexTemplate {
         locations,
         location_types,
     };
 
     Html(template.render().unwrap())
-}
-
-#[derive(Deserialize)]
-struct Params {
-    name: String,
-    description: String,
-    location_type_id: i32,
-}
-
-#[handler]
-async fn new_location(query: Form<Params>, Data(pool): Data<&PgPool>) -> StatusCode {
-    let location = Location::new(
-        query.name.clone(),
-        query.description.clone(),
-        query.location_type_id,
-    );
-    location.insert(pool).await.unwrap();
-
-    StatusCode::CREATED
-}
-
-fn api() -> Route {
-    Route::new().at("/locations", post(new_location))
 }
 
 #[tokio::main]
@@ -58,7 +37,7 @@ async fn main() -> Result<(), std::io::Error> {
 
     let app = Route::new()
         .at("/", get(index))
-        .at("/locations", post(new_location))
+        .nest("/locations", locations())
         .nest("/api", api())
         .data(pool);
 

@@ -13,7 +13,7 @@
 <h1>Locations</h1>
 <ul class="box">
     {% for location in locations %}
-    <li>{{ location.name }}: {{ location.description }}</li>
+    <li hx-get="/locations/{{location.id}}">{{ location.name }}: {{ location.description }}</li>
     {% endfor %}
 </ul>
 

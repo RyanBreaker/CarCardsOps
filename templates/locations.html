@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}CarCards - Locations{% endblock %}
+
+{% block main %}
+<h1>Locations</h1>
+<ul>
+    {% for location in locations %}
+        {% include "location.html" %}
+    {% endfor %}
+</ul>
+{% endblock %}
