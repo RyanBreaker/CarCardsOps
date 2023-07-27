@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "INSERT INTO location_types (name, description) VALUES ($1, $2) RETURNING *;",
+  "query": "UPDATE locations SET name = $1, description = $2 WHERE id = $3 RETURNING *",
   "describe": {
     "columns": [
       {
@@ -17,19 +17,26 @@
         "ordinal": 2,
         "name": "description",
         "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "location_type_id",
+        "type_info": "Int4"
       }
     ],
     "parameters": {
       "Left": [
         "Varchar",
-        "Text"
+        "Text",
+        "Int4"
       ]
     },
     "nullable": [
       false,
       false,
+      false,
       false
     ]
   },
-  "hash": "f06c2a47c9df6cd46640a0022e665c08e7d51fc698508b5d98012f07e4ad10e7"
+  "hash": "bfb0e5960b6988a9255f80b21376a3261aef6f01b07bb469f7436e25a0dc043b"
 }

@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM location_types WHERE id = $1;",
+  "query": "SELECT * FROM location_types",
   "describe": {
     "columns": [
       {
@@ -20,9 +20,7 @@
       }
     ],
     "parameters": {
-      "Left": [
-        "Int4"
-      ]
+      "Left": []
     },
     "nullable": [
       false,
@@ -30,5 +28,5 @@
       false
     ]
   },
-  "hash": "e96154f79e350bcd46dec984ade4aea14cc905e8fb38cd8f57fccfa9307a8eed"
+  "hash": "be96b2f1ab5e544c2f225328c50469b850b95145a837ece611d57c88500aa511"
 }
