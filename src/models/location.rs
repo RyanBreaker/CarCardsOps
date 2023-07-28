@@ -1,5 +1,5 @@
-use serde::Deserialize;
 use crate::models::Id;
+use serde::Deserialize;
 use sqlx::{query_as, Error, FromRow, PgPool};
 
 #[derive(FromRow, Debug, Clone, Deserialize)]
@@ -29,7 +29,7 @@ impl Location {
             location_type_id,
         }
     }
-    
+
     pub async fn insert(&self, pool: &PgPool) -> Result<Location, Error> {
         query_as!(
             Location,

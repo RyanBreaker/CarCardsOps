@@ -3,6 +3,24 @@
 {% block title %}CarCards - Locations{% endblock %}
 
 {% block main %}
+<h1>Add Location</h1>
+<form class="box" autocomplete="off">
+    <label>Name: <input type="text" name="name" value=""/></label>
+    <br />
+    <label>Description: <input type="text" name="description" value=""></label>
+    <br />
+    <label>Location Type:&nbsp;
+        <select name="location_type_id">
+            {% for location_type in location_types %}
+            <option value="{{ location_type.id }}">{{ location_type.name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br />
+    <input type="hidden" name="id" value="0">
+    <button type="submit" hx-post="/locations" >Add</button>
+</form>
+
 <h1>Locations</h1>
 <ul>
     {% for location in locations %}

@@ -4,6 +4,7 @@ use crate::models::{Location, LocationType};
 #[template(path = "locations.html")]
 pub struct LocationsTemplate {
     pub locations: Vec<Location>,
+    pub location_types: Vec<LocationType>,
 }
 
 #[derive(askama::Template)]

@@ -3,35 +3,5 @@
 {% block title %}CarCards - Home{% endblock %}
 
 {% block main %}
-<h1>Location Types</h1>
-<ul class="box">
-    {% for location_type in location_types %}
-    <li>{{ location_type.name }}: {{ location_type.description }}</li>
-    {% endfor %}
-</ul>
-
-<h1>Locations</h1>
-<ul class="box">
-    {% for location in locations %}
-    <li hx-get="/locations/{{location.id}}">{{ location.name }}: {{ location.description }}</li>
-    {% endfor %}
-</ul>
-
-<h1>Add Location</h1>
-<form class="box">
-    <label>Name: <input type="text" name="name"/></label>
-    <br />
-    <label>Description: <input type="text" name="description"></label>
-    <br />
-    <label>Location Type:&nbsp;
-        <select name="location_type_id">
-            {% for location_type in location_types %}
-            <option value="{{ location_type.id }}">{{ location_type.name }}</option>
-            {% endfor %}
-        </select>
-    </label>
-    <br />
-    <button type="submit" hx-post="/api/locations" hx-swap="none">Add</button>
-</form>
-
+<p>Hi!</p>
 {% endblock %}

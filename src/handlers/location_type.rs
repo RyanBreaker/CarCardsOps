@@ -1,9 +1,9 @@
+use crate::models::{Id, LocationType};
+use crate::templates::location_types::*;
 use askama::Template;
 use poem::handler;
 use poem::web::{Data, Form, Html, Path};
 use sqlx::PgPool;
-use crate::models::{Id, LocationType};
-use crate::templates::location_types::{LocationTypeEditorTemplate, LocationTypesTemplate, LocationTypeTemplate};
 
 #[handler]
 pub async fn location_types_view(Data(pool): Data<&PgPool>) -> Html<String> {
@@ -14,7 +14,7 @@ pub async fn location_types_view(Data(pool): Data<&PgPool>) -> Html<String> {
 }
 
 #[handler]
-pub async fn location_type_view(Path(id): Path<i32>, Data(pool): Data<&PgPool>) -> Html<String> {
+pub async fn location_type_view(Path(id): Path<Id>, Data(pool): Data<&PgPool>) -> Html<String> {
     let location_type = LocationTypeTemplate {
         location_type: LocationType::select(id, pool).await.unwrap(),
     };
