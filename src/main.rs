@@ -1,4 +1,3 @@
-mod api;
 mod handlers;
 mod models;
 mod templates;
@@ -10,23 +9,28 @@ use askama::Template;
 use poem::listener::TcpListener;
 use poem::middleware::Tracing;
 use poem::web::{Data, Html};
-use poem::{get, handler, EndpointExt, Route, Server};
-use sqlx::PgPool;
+use poem::{get, handler, EndpointExt, IntoResponse, Route, Server};
+use sqlx::{query_as, PgPool};
+use tokio::try_join;
 use tracing::info;
 
 #[handler]
-async fn index(Data(pool): Data<&PgPool>) -> Html<String> {
-    let (locations, location_types) =
-        match tokio::try_join!(Location::all(pool), LocationType::all(pool)) {
-            Ok(a) => a,
-            Err(e) => panic!("{e}"),
-        };
-    let template = IndexTemplate {
-        locations,
-        location_types,
+async fn index(Data(pool): Data<&PgPool>) -> impl IntoResponse {
+    let locations = query_as!(Location, "SELECT * FROM locations").fetch_all(pool);
+    let location_types = query_as!(LocationType, "SELECT * FROM location_types").fetch_all(pool);
+    let (locations, location_types) = match try_join!(locations, location_types) {
+        Ok(a) => a,
+        Err(e) => panic!("{e}"),
     };
 
-    Html(template.render().unwrap())
+    Html(
+        IndexTemplate {
+            locations,
+            location_types,
+        }
+        .render()
+        .unwrap(),
+    )
 }
 
 #[tokio::main]
@@ -43,7 +47,6 @@ async fn main() -> Result<(), std::io::Error> {
         .at("/", get(index))
         .nest("/locations", locations())
         .nest("/location_types", location_types())
-        // .nest("/api", api()) // TODO: Will this be used?
         .data(pool)
         .with(Tracing);
 
