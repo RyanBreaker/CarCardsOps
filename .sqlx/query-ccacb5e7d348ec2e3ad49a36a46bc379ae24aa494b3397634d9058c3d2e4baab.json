@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT * FROM locations ORDER BY name",
+  "query": "SELECT * FROM locations",
   "describe": {
     "columns": [
       {
@@ -34,5 +34,5 @@
       false
     ]
   },
-  "hash": "16cda9238a1e08f6f67bbfc7dbaafdede154aa5bc65ecc4d4a4dae923910bb24"
+  "hash": "ccacb5e7d348ec2e3ad49a36a46bc379ae24aa494b3397634d9058c3d2e4baab"
 }
