@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE locations SET name = $1, description = $2, location_type_id=$3 WHERE id = $4",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Text",
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "cfce0caa0a640bd29a2b7a4c267fc9dd5e8fdd5654c635df604aa7636f6d57b7"
+}

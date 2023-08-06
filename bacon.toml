@@ -23,6 +23,7 @@ command = [
     "--color", "always",
 ]
 need_stdout = false
+watch = ["templates"]
 
 [jobs.test]
 command = [

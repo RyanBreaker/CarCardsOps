@@ -10,7 +10,7 @@ pub struct LocationType {
     pub description: String,
 }
 
-#[derive(FromRow, Debug, Clone, Deserialize)]
+#[derive(FromRow, Debug, Clone, Deserialize, Default)]
 pub struct Location {
     pub id: Id,
     pub name: String,
@@ -18,9 +18,10 @@ pub struct Location {
     pub location_type_id: Id,
 }
 
-#[derive(Debug, FromRow, Deserialize)]
+#[derive(Debug, FromRow, Deserialize, Default)]
 pub struct Waybill {
     pub id: Id,
+    pub name: String,
     pub description: String,
     pub routing: String,
     pub from_location_id: Id,

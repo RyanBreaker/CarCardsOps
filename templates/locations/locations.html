@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}CarCards - Locations{% endblock %}
+
+{% block main %}
+<h1>Locations</h1>
+<a href="/locations/new">New Location</a>
+<ul>
+    {% for location in locations %}
+    <li>
+        <a href="/locations/{{location.id}}/edit">
+            {{location.name}}: {{location.description}}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

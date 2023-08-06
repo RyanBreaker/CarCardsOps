@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block main %}
+<form class="box" hx-boost="true" action="/locations/{{location.id}}" method="post" autocomplete="off">
+    <label>Name: <input name="name" value="{{location.name}}"></label>
+    <br/>
+    <label>Description: <input name="description" value="{{location.description}}"></label>
+    <br/>
+    <label>Location Type:&nbsp;
+        <select name="location_type_id">
+            {% for location_type in location_types %}
+            <option
+                    {% if location.location_type_id== location_type.id %} selected {% endif %}
+                    value="{{ location_type.id }}"
+            >
+                {{ location_type.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+    <input type="hidden" name="id" value="{{ location.id }}">
+    <button type="submit">Save</button>
+    <button type="button" hx-get="/locations" hx-push-url="true" hx-target="body">
+        Cancel
+    </button>
+</form>
+{% endblock %}

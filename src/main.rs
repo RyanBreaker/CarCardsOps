@@ -2,7 +2,7 @@ mod handlers;
 mod models;
 mod templates;
 
-use crate::handlers::{location_types, locations};
+use crate::handlers::{location_types, locations, waybills};
 use crate::models::{Location, LocationType};
 use crate::templates::IndexTemplate;
 use askama::Template;
@@ -45,8 +45,9 @@ async fn main() -> Result<(), std::io::Error> {
     info!("Initializing app...");
     let app = Route::new()
         .at("/", get(index))
-        .nest("/locations", locations())
         .nest("/location_types", location_types())
+        .nest("/locations", locations())
+        .nest("/waybills", waybills())
         .data(pool)
         .with(Tracing);
 

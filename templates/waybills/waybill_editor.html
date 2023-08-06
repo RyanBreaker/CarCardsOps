@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}CarCards - Waybill{% endblock %}
+
+{% block main %}
+<h1>Waybill</h1>
+<form class="box" hx-boost="true" action="/waybills/{{waybill.id}}" method="post" autocomplete="off">
+    <label>Name: <input name="name" value="{{waybill.name}}"></label>
+    <br/>
+    <label>Description: <input name="description" value="{{waybill.description}}"/></label>
+    <br/>
+    <label>Routing: <input name="routing" value="{{waybill.routing}}"/></label>
+    <br/>
+    <label>From Location:&nbsp;
+        <select name="from_location_id">
+            {% for location in locations %}
+            <option
+                    {% if waybill.from_location_id== location.id %} selected {% endif %}
+                    value="{{ location.id }}"
+            >
+                {{ location.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>To Location:&nbsp;
+        <select name="to_location_id">
+            {% for location in locations %}
+            <option
+                    {% if waybill.to_location_id== location.id %} selected {% endif %}
+                    value="{{ location.id }}"
+            >
+                {{ location.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+    <input type="hidden" name="id" value="{{waybill.id}}">
+    <button type="submit">Save</button>
+    <button type="button" hx-get="/waybills" hx-push-url="true" hx-target="body">Cancel</button>
+</form>
+{% endblock %}

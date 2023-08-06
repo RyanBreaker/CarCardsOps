@@ -1,5 +1,3 @@
-CREATE EXTENSION CITEXT;
-
 CREATE TABLE location_types
 (
     id          SERIAL PRIMARY KEY,
@@ -7,7 +5,6 @@ CREATE TABLE location_types
     description TEXT         NOT NULL DEFAULT ''
 );
 
--- Insert data into the "location_types" table
 INSERT INTO location_types (name, description)
 VALUES ('Staging', 'Staging area for cars originating from or terminating at locations off the layout.'),
        ('Yard', 'A yard physically present on the layout for sorting cars into trains.');
@@ -23,6 +20,7 @@ CREATE TABLE locations
 CREATE TABLE waybills
 (
     id               SERIAL PRIMARY KEY,
+    name             TEXT                              NOT NULL,
     description      TEXT                              NOT NULL DEFAULT '',
     routing          TEXT                              NOT NULL DEFAULT '',
     from_location_id INTEGER REFERENCES locations (id) NOT NULL,

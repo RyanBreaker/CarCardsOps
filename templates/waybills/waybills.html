@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1>Waybills</h1>
+<a href="/waybills/new">New Waybill</a>
+<ul>
+    {% for waybill in waybills %}
+    <li hx-get="/waybills/{{waybill.id}}/edit" hx-target="body" hx-push-url="true">{{waybill.name}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
