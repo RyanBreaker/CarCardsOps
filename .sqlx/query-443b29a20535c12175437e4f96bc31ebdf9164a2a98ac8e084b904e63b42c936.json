@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        UPDATE waybills\n        SET name=$1, description=$2, routing=$3, from_location_id=$4, to_location_id=$5, prev_waybill_id=$6, next_waybill_id=$7\n        WHERE id=$8\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 8
+    },
+    "nullable": []
+  },
+  "hash": "443b29a20535c12175437e4f96bc31ebdf9164a2a98ac8e084b904e63b42c936"
+}

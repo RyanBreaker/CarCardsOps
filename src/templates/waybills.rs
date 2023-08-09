@@ -1,4 +1,5 @@
 use crate::models::{Location, Waybill};
+use crate::templates::filters;
 
 #[derive(askama::Template)]
 #[template(path = "waybills/waybills.html")]
@@ -10,5 +11,7 @@ pub struct WaybillsTemplate {
 #[template(path = "waybills/waybill_editor.html")]
 pub struct WaybillEditorTemplate {
     pub waybill: Waybill,
+    pub waybills: Vec<Waybill>,
     pub locations: Vec<Location>,
+    pub is_new: bool,
 }

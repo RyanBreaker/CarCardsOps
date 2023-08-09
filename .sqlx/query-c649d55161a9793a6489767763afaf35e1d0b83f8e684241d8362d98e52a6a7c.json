@@ -1,0 +1,62 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM WAYBILLS",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Int64"
+      },
+      {
+        "name": "name",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "description",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "routing",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "from_location_id",
+        "ordinal": 4,
+        "type_info": "Int64"
+      },
+      {
+        "name": "to_location_id",
+        "ordinal": 5,
+        "type_info": "Int64"
+      },
+      {
+        "name": "next_waybill_id",
+        "ordinal": 6,
+        "type_info": "Int64"
+      },
+      {
+        "name": "prev_waybill_id",
+        "ordinal": 7,
+        "type_info": "Int64"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  "hash": "c649d55161a9793a6489767763afaf35e1d0b83f8e684241d8362d98e52a6a7c"
+}
