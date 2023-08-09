@@ -3,10 +3,10 @@ use crate::templates::location_types::*;
 use askama::Template;
 use poem::web::{Data, Form, Html, Path};
 use poem::{handler, IntoResponse};
-use sqlx::{query_as, PgPool};
+use sqlx::{query_as, SqlitePool};
 
 #[handler]
-pub async fn location_types_view(Data(pool): Data<&PgPool>) -> impl IntoResponse {
+pub async fn location_types_view(Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
     let location_types = query_as!(LocationType, "SELECT * FROM location_types")
         .fetch_all(pool)
         .await
@@ -17,7 +17,7 @@ pub async fn location_types_view(Data(pool): Data<&PgPool>) -> impl IntoResponse
 #[handler]
 pub async fn location_type_view(
     Path(id): Path<Id>,
-    Data(pool): Data<&PgPool>,
+    Data(pool): Data<&SqlitePool>,
 ) -> impl IntoResponse {
     let location_type = query_as!(
         LocationType,
@@ -34,11 +34,11 @@ pub async fn location_type_view(
 pub async fn location_type_update(
     Path(_id): Path<Id>,
     Form(location_type): Form<LocationType>,
-    Data(pool): Data<&PgPool>,
+    Data(pool): Data<&SqlitePool>,
 ) -> impl IntoResponse {
     query_as!(
         LocationType,
-        "UPDATE location_types SET name = $1, description = $2 WHERE id = $3 RETURNING *",
+        "UPDATE location_types SET name = $1, description = $2 WHERE id = $3; SELECT * FROM location_types WHERE id = last_insert_rowid()",
         location_type.name,
         location_type.description,
         location_type.id
@@ -52,7 +52,7 @@ pub async fn location_type_update(
 #[handler]
 pub async fn location_type_editor(
     Path(id): Path<Id>,
-    Data(pool): Data<&PgPool>,
+    Data(pool): Data<&SqlitePool>,
 ) -> impl IntoResponse {
     let location_type = query_as!(
         LocationType,

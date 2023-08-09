@@ -1,6 +1,6 @@
 {
   "db_name": "SQLite",
-  "query": "SELECT * FROM location_types WHERE id = $1",
+  "query": "UPDATE location_types SET name = $1, description = $2 WHERE id = $3; SELECT * FROM location_types WHERE id = last_insert_rowid()",
   "describe": {
     "columns": [
       {
@@ -20,7 +20,7 @@
       }
     ],
     "parameters": {
-      "Right": 1
+      "Right": 3
     },
     "nullable": [
       false,
@@ -28,5 +28,5 @@
       false
     ]
   },
-  "hash": "1ca3142683d2d35d1d219f611aa9c16a576ce89eeda9a0519ef99d703f8fe159"
+  "hash": "b236baf6700fe09e24cbc4b94f3b5a10a859378f9f83e91513d76b512a71c340"
 }

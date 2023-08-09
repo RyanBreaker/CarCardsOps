@@ -1,12 +1,12 @@
-use crate::models::{Id, Location, Waybill};
+use crate::models::{Id, Waybill, Location};
 use crate::templates::waybills::{WaybillEditorTemplate, WaybillsTemplate};
 use askama::Template;
 use poem::web::{Data, Form, Html, Path, Redirect};
 use poem::{handler, IntoResponse};
-use sqlx::{query, query_as, PgPool};
+use sqlx::{query, query_as, SqlitePool};
 
 #[handler]
-pub async fn waybills_view(Data(pool): Data<&PgPool>) -> impl IntoResponse {
+pub async fn waybills_view(Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
     let waybills = query_as!(
         Waybill,
         r#"
@@ -22,7 +22,7 @@ pub async fn waybills_view(Data(pool): Data<&PgPool>) -> impl IntoResponse {
 }
 
 #[handler]
-pub async fn waybill_new(Data(pool): Data<&PgPool>) -> impl IntoResponse {
+pub async fn waybill_new(Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
     let locations = sqlx::query_as!(Location, "SELECT * FROM LOCATIONS")
         .fetch_all(pool)
         .await
@@ -38,7 +38,7 @@ pub async fn waybill_new(Data(pool): Data<&PgPool>) -> impl IntoResponse {
 }
 
 #[handler]
-pub async fn waybill_edit(Path(id): Path<Id>, Data(pool): Data<&PgPool>) -> impl IntoResponse {
+pub async fn waybill_edit(Path(id): Path<Id>, Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
     let waybill = query_as!(Waybill, "SELECT * FROM waybills WHERE id=$1", id).fetch_one(pool);
     let locations = query_as!(Location, "SELECT * FROM locations").fetch_all(pool);
     let (waybill, locations) = tokio::try_join!(waybill, locations).unwrap();
@@ -52,7 +52,7 @@ pub async fn waybill_edit(Path(id): Path<Id>, Data(pool): Data<&PgPool>) -> impl
 #[handler]
 pub async fn waybill_post(
     Form(waybill): Form<Waybill>,
-    Data(pool): Data<&PgPool>,
+    Data(pool): Data<&SqlitePool>,
 ) -> impl IntoResponse {
     query!(
         "INSERT INTO waybills (name, description, routing, from_location_id, to_location_id) VALUES ($1, $2, $3, $4, $5)",
@@ -72,7 +72,7 @@ pub async fn waybill_post(
 pub async fn waybill_put(
     Path(id): Path<Id>,
     Form(waybill): Form<Waybill>,
-    Data(pool): Data<&PgPool>,
+    Data(pool): Data<&SqlitePool>,
 ) -> impl IntoResponse {
     query!(
         "UPDATE waybills SET name=$1, description=$2, routing=$3, from_location_id=$4, to_location_id=$5 WHERE id=$6",

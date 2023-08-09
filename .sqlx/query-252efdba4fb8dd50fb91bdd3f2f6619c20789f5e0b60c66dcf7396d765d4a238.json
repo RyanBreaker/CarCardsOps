@@ -1,16 +1,10 @@
 {
-  "db_name": "PostgreSQL",
+  "db_name": "SQLite",
   "query": "INSERT INTO waybills (name, description, routing, from_location_id, to_location_id) VALUES ($1, $2, $3, $4, $5)",
   "describe": {
     "columns": [],
     "parameters": {
-      "Left": [
-        "Text",
-        "Text",
-        "Text",
-        "Int4",
-        "Int4"
-      ]
+      "Right": 5
     },
     "nullable": []
   },

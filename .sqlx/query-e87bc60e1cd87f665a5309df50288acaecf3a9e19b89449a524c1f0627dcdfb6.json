@@ -1,14 +1,10 @@
 {
-  "db_name": "PostgreSQL",
+  "db_name": "SQLite",
   "query": "INSERT INTO locations (name, description, location_type_id) VALUES ($1, $2, $3)",
   "describe": {
     "columns": [],
     "parameters": {
-      "Left": [
-        "Varchar",
-        "Text",
-        "Int4"
-      ]
+      "Right": 3
     },
     "nullable": []
   },

@@ -10,12 +10,12 @@ use poem::listener::TcpListener;
 use poem::middleware::Tracing;
 use poem::web::{Data, Html};
 use poem::{get, handler, EndpointExt, IntoResponse, Route, Server};
-use sqlx::{query_as, PgPool};
+use sqlx::{query_as, SqlitePool};
 use tokio::try_join;
 use tracing::info;
 
 #[handler]
-async fn index(Data(pool): Data<&PgPool>) -> impl IntoResponse {
+async fn index(Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
     let locations = query_as!(Location, "SELECT * FROM locations").fetch_all(pool);
     let location_types = query_as!(LocationType, "SELECT * FROM location_types").fetch_all(pool);
     let (locations, location_types) = match try_join!(locations, location_types) {
@@ -41,6 +41,7 @@ async fn main() -> Result<(), std::io::Error> {
 
     info!("Creating db pools...");
     let pool = db_init().await;
+    sqlx::migrate!().run(&pool).await.unwrap();
 
     info!("Initializing app...");
     let app = Route::new()
@@ -58,9 +59,9 @@ async fn main() -> Result<(), std::io::Error> {
     Ok(())
 }
 
-async fn db_init() -> PgPool {
+async fn db_init() -> SqlitePool {
     let db_url = &std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    PgPool::connect(db_url)
+    SqlitePool::connect(db_url)
         .await
         .expect("Failed to connect to Postgres")
 }

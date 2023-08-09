@@ -1,11 +1,11 @@
 use serde::Deserialize;
 use sqlx::FromRow;
 
-pub type Id = i32;
+pub type Id = i64;
 
 #[derive(FromRow, Debug, Deserialize)]
 pub struct LocationType {
-    pub id: i32,
+    pub id: Id,
     pub name: String,
     pub description: String,
 }
