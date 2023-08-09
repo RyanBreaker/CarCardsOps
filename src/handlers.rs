@@ -12,7 +12,8 @@ use poem::{get, post, Route};
 pub fn location_types() -> Route {
     Route::new()
         .at("/", get(location_types_view))
-        .at("/:id", get(location_type_view).put(location_type_update))
+        .at("/new", get(location_type_new))
+        .at("/:id", post(location_type_post).put(location_type_update))
         .at("/:id/edit", get(location_type_editor))
 }
 

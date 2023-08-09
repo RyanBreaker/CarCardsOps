@@ -65,6 +65,7 @@ pub async fn location_edit(Path(id): Path<Id>, Data(pool): Data<&SqlitePool>) ->
         LocationEditorTemplate {
             location,
             location_types,
+            is_new: false,
         }
         .render()
         .unwrap(),
@@ -82,6 +83,7 @@ pub async fn location_new(Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
         LocationEditorTemplate {
             location,
             location_types,
+            is_new: true,
         }
         .render()
         .unwrap(),

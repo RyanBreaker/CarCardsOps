@@ -1,9 +1,9 @@
 use crate::models::{Id, LocationType};
 use crate::templates::location_types::*;
 use askama::Template;
-use poem::web::{Data, Form, Html, Path};
+use poem::web::{Data, Form, Html, Path, Redirect};
 use poem::{handler, IntoResponse};
-use sqlx::{query_as, SqlitePool};
+use sqlx::{query, query_as, SqlitePool};
 
 #[handler]
 pub async fn location_types_view(Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
@@ -15,38 +15,51 @@ pub async fn location_types_view(Data(pool): Data<&SqlitePool>) -> impl IntoResp
 }
 
 #[handler]
-pub async fn location_type_view(
+pub async fn location_type_new() -> impl IntoResponse {
+    Html(
+        LocationTypeEditorTemplate {
+            location_type: LocationType::default(),
+            is_new: true,
+        }
+        .render()
+        .unwrap(),
+    )
+}
+
+#[handler]
+pub async fn location_type_post(
     Path(id): Path<Id>,
+    Form(location_type): Form<LocationType>,
     Data(pool): Data<&SqlitePool>,
 ) -> impl IntoResponse {
-    let location_type = query_as!(
-        LocationType,
-        "SELECT * FROM location_types WHERE id = $1",
+    query!(
+        "UPDATE location_types SET name = $1, description = $2 WHERE id = $3",
+        location_type.name,
+        location_type.description,
+        id
+    )
+    .execute(pool)
+    .await
+    .unwrap();
+    Redirect::see_other("/location_types")
+}
+
+#[handler]
+pub async fn location_type_update(
+    Path(id): Path<Id>,
+    Form(location_type): Form<LocationType>,
+    Data(pool): Data<&SqlitePool>,
+) -> impl IntoResponse {
+    query!(
+        "UPDATE location_types SET name = $1, description = $2 WHERE id = $3",
+        location_type.name,
+        location_type.description,
         id
     )
     .fetch_one(pool)
     .await
     .unwrap();
-    Html(LocationTypeTemplate { location_type }.render().unwrap())
-}
-
-#[handler]
-pub async fn location_type_update(
-    Path(_id): Path<Id>,
-    Form(location_type): Form<LocationType>,
-    Data(pool): Data<&SqlitePool>,
-) -> impl IntoResponse {
-    query_as!(
-        LocationType,
-        "UPDATE location_types SET name = $1, description = $2 WHERE id = $3; SELECT * FROM location_types WHERE id = last_insert_rowid()",
-        location_type.name,
-        location_type.description,
-        location_type.id
-    )
-    .fetch_one(pool)
-    .await
-    .unwrap();
-    Html(LocationTypeTemplate { location_type }.render().unwrap())
+    Redirect::see_other("/location_types")
 }
 
 #[handler]
@@ -63,7 +76,7 @@ pub async fn location_type_editor(
     .await
     .unwrap();
     Html(
-        LocationTypeEditorTemplate { location_type }
+        LocationTypeEditorTemplate { location_type, is_new: false }
             .render()
             .unwrap(),
     )

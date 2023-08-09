@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% block main %}
-<form class="box" hx-boost="true" action="/locations/{{location.id}}" method="post" autocomplete="off">
+<form class="box"
+      hx-boost="true"
+      action="/locations/{{location.id}}"
+      method="{{ is_new|yesno(post,put) }}"
+      autocomplete="off"
+>
     <label>Name: <input name="name" value="{{location.name}}"></label>
     <br/>
     <label>Description: <input name="description" value="{{location.description}}"></label>

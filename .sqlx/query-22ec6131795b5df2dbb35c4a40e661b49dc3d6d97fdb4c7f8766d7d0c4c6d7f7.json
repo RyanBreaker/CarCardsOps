@@ -32,6 +32,16 @@
         "name": "to_location_id",
         "ordinal": 5,
         "type_info": "Int64"
+      },
+      {
+        "name": "next_waybill_id",
+        "ordinal": 6,
+        "type_info": "Int64"
+      },
+      {
+        "name": "prev_waybill_id",
+        "ordinal": 7,
+        "type_info": "Int64"
       }
     ],
     "parameters": {
@@ -43,7 +53,9 @@
       false,
       false,
       false,
-      false
+      false,
+      true,
+      true
     ]
   },
   "hash": "22ec6131795b5df2dbb35c4a40e661b49dc3d6d97fdb4c7f8766d7d0c4c6d7f7"

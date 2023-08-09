@@ -3,7 +3,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE location_types
 (
     id          INTEGER PRIMARY KEY,
-    name        TEXT NOT NULL,
+    name        TEXT NOT NULL COLLATE NOCASE UNIQUE,
     description TEXT NOT NULL DEFAULT ''
 );
 
@@ -14,7 +14,7 @@ VALUES ('Staging', 'Staging area for cars originating from or terminating at loc
 CREATE TABLE locations
 (
     id               INTEGER PRIMARY KEY,
-    name             TEXT                                   NOT NULL,
+    name             TEXT COLLATE NOCASE UNIQUE             NOT NULL,
     description      TEXT                                   NOT NULL DEFAULT '',
     location_type_id INTEGER REFERENCES location_types (id) NOT NULL
 );
@@ -22,30 +22,32 @@ CREATE TABLE locations
 CREATE TABLE waybills
 (
     id               INTEGER PRIMARY KEY,
-    name             TEXT                              NOT NULL,
+    name             TEXT COLLATE NOCASE UNIQUE        NOT NULL,
     description      TEXT                              NOT NULL DEFAULT '',
     routing          TEXT                              NOT NULL DEFAULT '',
     from_location_id INTEGER REFERENCES locations (id) NOT NULL,
-    to_location_id   INTEGER REFERENCES locations (id) NOT NULL
+    to_location_id   INTEGER REFERENCES locations (id) NOT NULL,
+    next_waybill_id  INTEGER REFERENCES waybills (id),
+    prev_waybill_id  INTEGER REFERENCES waybills (id)
 );
 
 CREATE TABLE trains
 (
     id   INTEGER PRIMARY KEY,
-    name TEXT NOT NULL DEFAULT ''
+    name TEXT COLLATE NOCASE UNIQUE NOT NULL
 );
 
 CREATE TABLE car_types
 (
     id          INTEGER PRIMARY KEY,
-    name        TEXT NOT NULL,
-    description TEXT NOT NULL DEFAULT ''
+    name        TEXT COLLATE NOCASE UNIQUE NOT NULL,
+    description TEXT                       NOT NULL DEFAULT ''
 );
 
 CREATE TABLE roads
 (
     id   INTEGER PRIMARY KEY,
-    name TEXT NOT NULL
+    name TEXT COLLATE NOCASE UNIQUE NOT NULL
 );
 
 CREATE TABLE car_cards

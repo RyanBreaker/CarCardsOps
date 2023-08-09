@@ -18,10 +18,7 @@ use tracing::info;
 async fn index(Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
     let locations = query_as!(Location, "SELECT * FROM locations").fetch_all(pool);
     let location_types = query_as!(LocationType, "SELECT * FROM location_types").fetch_all(pool);
-    let (locations, location_types) = match try_join!(locations, location_types) {
-        Ok(a) => a,
-        Err(e) => panic!("{e}"),
-    };
+    let (locations, location_types) = try_join!(locations, location_types).unwrap();
 
     Html(
         IndexTemplate {

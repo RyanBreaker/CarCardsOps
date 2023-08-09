@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}CarCards - Location Types{% endblock %}
+
+{% block main %}
+<h1>Location Types</h1>
+<ul>
+    {% for location_type in location_types %}
+    <li hx-get="/location_types/{{location_type.id}}/edit" hx-target="this" hx-swap="outerHTML">
+        {{location_type.name}}: {{location_type.description}}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

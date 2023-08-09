@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block main %}
+<form class="box"
+      hx-boost="true"
+      action="/location_types/{{location_type.id}}"
+      method="{{ is_new|yesno(post, put) }}"
+      autocomplete="off"
+>
+    <label>Name: <input name="name" value="{{location_type.name}}"></label>
+    <br/>
+    <label>Description: <input name="description" value="{{location_type.description}}"></label>
+    <br/>
+    <input type="hidden" name="id" value="{{location_type.id}}">
+    <button type="submit">Save</button>
+    <button type="button" hx-get="/location_types" hx-push-url="true" hx-target="body">Cancel</button>
+</form>
+{% endblock %}

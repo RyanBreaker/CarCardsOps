@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE location_types SET name = $1, description = $2 WHERE id = $3",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "1f96ca2327e9cdf284bd682bf2df914043fb667bf754c42cb8e1a9479e67c7a3"
+}
