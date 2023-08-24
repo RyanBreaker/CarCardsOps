@@ -39,7 +39,7 @@ pub async fn waybill_new(Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
 }
 
 #[handler]
-pub async fn waybill_edit(Path(id): Path<Id>, Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
+pub async fn waybill_editor(Path(id): Path<Id>, Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
     let waybill = query_as!(Waybill, "SELECT * FROM waybills WHERE id=$1", id).fetch_one(pool);
     let waybills = query_as!(Waybill, "SELECT * FROM waybills WHERE id <> $1", id).fetch_all(pool);
     let locations = query_as!(Location, "SELECT * FROM locations").fetch_all(pool);
@@ -56,11 +56,8 @@ pub async fn waybill_edit(Path(id): Path<Id>, Data(pool): Data<&SqlitePool>) -> 
     )
 }
 
-fn get_waybill_ids(waybill: &Waybill) -> (Option<Id>, Option<Id>) {
-    (
-        waybill.prev_waybill_id.filter(|id| *id > 0),
-        waybill.next_waybill_id.filter(|id| *id > 0),
-    )
+fn next_waybill_id(waybill: &Waybill) -> Option<Id> {
+    waybill.next_waybill_id.filter(|id| *id > 0)
 }
 
 #[handler]
@@ -68,18 +65,17 @@ pub async fn waybill_post(
     Form(waybill): Form<Waybill>,
     Data(pool): Data<&SqlitePool>,
 ) -> impl IntoResponse {
-    let (prev_waybill_id, next_waybill_id) = get_waybill_ids(&waybill);
+    let next_waybill_id = next_waybill_id(&waybill);
     query!(
         r#"
-        INSERT INTO waybills (name, description, routing, from_location_id, to_location_id, prev_waybill_id, next_waybill_id)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO waybills (consignee, description, routing, from_location_id, to_location_id, next_waybill_id)
+        VALUES ($1, $2, $3, $4, $5, $6)
         "#,
-        waybill.name,
+        waybill.consignee,
         waybill.description,
         waybill.routing,
         waybill.from_location_id,
         waybill.to_location_id,
-        prev_waybill_id,
         next_waybill_id,
     )
         .execute(pool)
@@ -94,19 +90,20 @@ pub async fn waybill_put(
     Form(waybill): Form<Waybill>,
     Data(pool): Data<&SqlitePool>,
 ) -> impl IntoResponse {
-    let (prev_waybill_id, next_waybill_id) = get_waybill_ids(&waybill);
+    let next_waybill_id = next_waybill_id(&waybill);
     query!(
         r#"
         UPDATE waybills
-        SET name=$1, description=$2, routing=$3, from_location_id=$4, to_location_id=$5, prev_waybill_id=$6, next_waybill_id=$7
-        WHERE id=$8
+        SET consignee=$1, description=$2, routing=$3, via=$4, shipper=$5, from_location_id=$6, to_location_id=$7, next_waybill_id=$8
+        WHERE id=$9
         "#,
-        waybill.name,
+        waybill.consignee,
         waybill.description,
         waybill.routing,
+        waybill.via,
+        waybill.shipper,
         waybill.from_location_id,
         waybill.to_location_id,
-        prev_waybill_id,
         next_waybill_id,
         id
     )

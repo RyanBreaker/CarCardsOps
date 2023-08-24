@@ -9,7 +9,8 @@ CREATE TABLE location_types
 
 INSERT INTO location_types (name, description)
 VALUES ('Staging', 'Staging area for cars originating from or terminating at locations off the layout.'),
-       ('Yard', 'A yard physically present on the layout for sorting cars into trains.');
+       ('Yard', 'A yard physically present on the layout for sorting cars into trains.'),
+       ('Industry', 'A type of customer that takes delivery of cars.');
 
 CREATE TABLE locations
 (
@@ -22,13 +23,14 @@ CREATE TABLE locations
 CREATE TABLE waybills
 (
     id               INTEGER PRIMARY KEY,
-    name             TEXT COLLATE NOCASE UNIQUE        NOT NULL,
+    consignee        TEXT                              NOT NULL,
     description      TEXT                              NOT NULL DEFAULT '',
     routing          TEXT                              NOT NULL DEFAULT '',
+    via              TEXT                              NOT NULL DEFAULT '',
+    shipper          TEXT                              NOT NULL DEFAULT '',
     from_location_id INTEGER REFERENCES locations (id) NOT NULL,
     to_location_id   INTEGER REFERENCES locations (id) NOT NULL,
-    next_waybill_id  INTEGER REFERENCES waybills (id),
-    prev_waybill_id  INTEGER REFERENCES waybills (id)
+    next_waybill_id  INTEGER REFERENCES waybills (id)
 );
 
 CREATE TABLE trains
@@ -46,8 +48,9 @@ CREATE TABLE car_types
 
 CREATE TABLE roads
 (
-    id   INTEGER PRIMARY KEY,
-    name TEXT COLLATE NOCASE UNIQUE NOT NULL
+    id        INTEGER PRIMARY KEY,
+    name      TEXT COLLATE NOCASE UNIQUE NOT NULL,
+    shorthand TEXT                       NOT NULL DEFAULT ''
 );
 
 CREATE TABLE car_cards

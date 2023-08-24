@@ -57,7 +57,7 @@ pub async fn location_put(
 }
 
 #[handler]
-pub async fn location_edit(Path(id): Path<Id>, Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
+pub async fn location_editor(Path(id): Path<Id>, Data(pool): Data<&SqlitePool>) -> impl IntoResponse {
     let location = query_as!(Location, "SELECT * FROM locations WHERE id = $1", id).fetch_one(pool);
     let location_types = query_as!(LocationType, "SELECT * FROM location_types").fetch_all(pool);
     let (location, location_types) = tokio::try_join!(location, location_types).unwrap();

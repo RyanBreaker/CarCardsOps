@@ -4,10 +4,13 @@
 
 {% block main %}
 <h1>Location Types</h1>
+<a href="/location_types/new">New Location Type</a>
 <ul>
     {% for location_type in location_types %}
-    <li hx-get="/location_types/{{location_type.id}}/edit" hx-target="this" hx-swap="outerHTML">
-        {{location_type.name}}: {{location_type.description}}
+    <li>
+        <a href="/location_types/{{location_type.id}}/edit">
+            {{location_type.name}}: {{location_type.description}}
+        </a>
     </li>
     {% endfor %}
 </ul>

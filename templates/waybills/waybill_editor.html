@@ -2,23 +2,27 @@
 
 {% block title %}CarCards - Waybill{% endblock %}
 
-
 {% block main %}
-{% let prev_waybill_id = waybill.prev_waybill_id.unwrap_or(0) %}
 {% let next_waybill_id = waybill.next_waybill_id.unwrap_or(0) %}
-<h1>Waybill</h1>
-<form class="box" hx-boost="true" action="/waybills/{{waybill.id}}" method="{{is_new|yesno(post,put)}}" autocomplete="off">
-    <label>Name: <input name="name" value="{{waybill.name}}"></label>
+{% let header = is_new|yesno("New Waybill", waybill.consignee) %}
+<h1>{{header}}</h1>
+<form class="box" hx-boost="true" action="/waybills/{{waybill.id}}" method="{{is_new|yesno(post,put)}}"
+      autocomplete="off">
+    <label>Consignee: <input name="consignee" value="{{waybill.consignee}}"></label>
     <br/>
     <label>Description: <input name="description" value="{{waybill.description}}"/></label>
     <br/>
     <label>Routing: <input name="routing" value="{{waybill.routing}}"/></label>
     <br/>
+    <label>Via: <input name="via" value="{{waybill.via}}"/></label>
+    <br/>
+    <label>Shipper: <input name="shipper" value="{{waybill.shipper}}"/></label>
+    <br/>
     <label>From Location:&nbsp;
         <select name="from_location_id">
             {% for location in locations %}
             <option
-                    {% if waybill.from_location_id == location.id %} selected {% endif %}
+                    {% if waybill.from_location_id== location.id %} selected {% endif %}
                     value="{{ location.id }}"
             >
                 {{ location.name }}
@@ -31,7 +35,7 @@
         <select name="to_location_id">
             {% for location in locations %}
             <option
-                    {% if waybill.to_location_id == location.id %} selected {% endif %}
+                    {% if waybill.to_location_id== location.id %} selected {% endif %}
                     value="{{ location.id }}"
             >
                 {{ location.name }}
@@ -41,29 +45,15 @@
     </label>
     <br/>
     <label>
-        Prev Waybill:&nbsp;
-        <select name="prev_waybill_id">
-            <option value="0">None</option>
-            {% for waybill in waybills %}
-            <option
-                    {% if prev_waybill_id == waybill.id %} selected {% endif %}
-                    value="{{ waybill.id }}"
-            >
-                {{ waybill.name }}
-            </option>
-            {% endfor %}
-        </select>
-    </label>
-    <label>
         Next Waybill:&nbsp;
         <select name="next_waybill_id">
             <option value="0">None</option>
             {% for waybill in waybills %}
             <option
-                    {% if next_waybill_id == waybill.id %} selected {% endif %}
+                    {% if next_waybill_id== waybill.id %} selected {% endif %}
                     value="{{ waybill.id }}"
             >
-                {{ waybill.name }}
+                {{ waybill.consignee }}
             </option>
             {% endfor %}
         </select>

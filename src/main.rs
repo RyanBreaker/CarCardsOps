@@ -2,7 +2,7 @@ mod handlers;
 mod models;
 mod templates;
 
-use crate::handlers::{location_types, locations, waybills};
+use crate::handlers::{location_types, locations, roads, waybills};
 use crate::models::{Location, LocationType};
 use crate::templates::IndexTemplate;
 use askama::Template;
@@ -46,6 +46,7 @@ async fn main() -> Result<(), std::io::Error> {
         .nest("/location_types", location_types())
         .nest("/locations", locations())
         .nest("/waybills", waybills())
+        .nest("/roads", roads())
         .data(pool)
         .with(Tracing);
 

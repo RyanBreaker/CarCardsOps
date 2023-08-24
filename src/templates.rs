@@ -1,6 +1,7 @@
 pub mod location_types;
 pub mod locations;
 pub mod waybills;
+pub mod roads;
 
 use crate::models::{Location, LocationType};
 

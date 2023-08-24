@@ -5,7 +5,11 @@
 <a href="/waybills/new">New Waybill</a>
 <ul>
     {% for waybill in waybills %}
-    <li hx-get="/waybills/{{waybill.id}}/edit" hx-target="body" hx-push-url="true">{{waybill.name}}</li>
+    <li>
+        <a href="/waybills/{{waybill.id}}/edit">
+            {{waybill.from_location_id}} -> {{waybill.to_location_id}}
+        </a>
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}

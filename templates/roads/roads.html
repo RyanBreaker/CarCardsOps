@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}CarCards - Roads{% endblock %}
+
+{% block main %}
+<h1>Roads</h1>
+<a href="/roads/new">New Road</a>
+<ul>
+    {% for road in roads %}
+    <li>
+        <a href="/roads/{{road.id}}/edit">
+            {{road.name}} {% if !road.shorthand.is_empty() %}({{road.shorthand}}){% endif %}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
