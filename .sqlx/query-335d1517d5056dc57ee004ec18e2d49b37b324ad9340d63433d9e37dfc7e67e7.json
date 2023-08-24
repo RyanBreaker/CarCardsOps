@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "UPDATE roads SET name=$1, shorthand=$2 WHERE id=$3",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "335d1517d5056dc57ee004ec18e2d49b37b324ad9340d63433d9e37dfc7e67e7"
+}
