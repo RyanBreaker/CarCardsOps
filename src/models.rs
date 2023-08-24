@@ -3,14 +3,14 @@ use sqlx::FromRow;
 
 pub type Id = i64;
 
-#[derive(Debug, Default, Deserialize, FromRow)]
+#[derive(Clone, Debug, Default, Deserialize, FromRow)]
 pub struct LocationType {
     pub id: Id,
     pub name: String,
     pub description: String,
 }
 
-#[derive(Debug, Default, Deserialize, FromRow)]
+#[derive(Clone, Debug, Default, Deserialize, FromRow)]
 pub struct Location {
     pub id: Id,
     pub name: String,
@@ -18,7 +18,7 @@ pub struct Location {
     pub location_type_id: Id,
 }
 
-#[derive(Debug, Default, Deserialize, FromRow)]
+#[derive(Clone, Debug, Default, Deserialize, FromRow)]
 pub struct Waybill {
     pub id: Id,
     pub consignee: String,
@@ -31,26 +31,27 @@ pub struct Waybill {
     pub next_waybill_id: Option<Id>,
 }
 
-#[derive(Debug, Default, Deserialize, FromRow)]
+#[derive(Clone, Debug, Default, Deserialize, FromRow)]
 pub struct Train {
     pub id: Id,
     pub name: String,
 }
 
-#[derive(Debug, Default, Deserialize, FromRow)]
+#[derive(Clone, Debug, Default, Deserialize, FromRow)]
 pub struct CarType {
     pub id: Id,
     pub name: String,
     pub description: String,
 }
 
-#[derive(Debug, Default, Deserialize, FromRow)]
+#[derive(Clone, Debug, Default, Deserialize, FromRow)]
 pub struct Road {
     pub id: Id,
     pub name: String,
     pub shorthand: String,
 }
 
+#[derive(Clone, Debug, Default, Deserialize, FromRow)]
 pub struct CarCard {
     pub id: Id,
     pub number: String,

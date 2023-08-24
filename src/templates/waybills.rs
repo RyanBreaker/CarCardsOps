@@ -1,10 +1,16 @@
 use crate::models::{Location, Waybill};
 use crate::templates::filters;
 
+pub struct WaybillLocation {
+    pub waybill: Waybill,
+    pub from_location: Location,
+    pub to_location: Location,
+}
+
 #[derive(askama::Template)]
 #[template(path = "waybills/waybills.html")]
 pub struct WaybillsTemplate {
-    pub waybills: Vec<Waybill>,
+    pub waybills: Vec<WaybillLocation>,
 }
 
 #[derive(askama::Template)]

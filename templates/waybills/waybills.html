@@ -6,8 +6,8 @@
 <ul>
     {% for waybill in waybills %}
     <li>
-        <a href="/waybills/{{waybill.id}}/edit">
-            {{waybill.from_location_id}} -> {{waybill.to_location_id}}
+        <a href="/waybills/{{waybill.waybill.id}}/edit">
+            {{waybill.waybill.consignee}}: {{waybill.from_location.name}} -> {{waybill.to_location.name}}
         </a>
     </li>
     {% endfor %}
